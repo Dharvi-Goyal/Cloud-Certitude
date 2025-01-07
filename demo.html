@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Web to Enquiry</title>
+<script>
+    async function submitForm(event) {
+        event.preventDefault(); // Prevent page reload
+        // Prepare data
+        const data = {
+            salutation: document.getElementById("salutation").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            mobile: document.getElementById("mobile").value,
+            email: document.getElementById("email").value,
+            interestReason: document.getElementById("interestReason").value,
+        };
+        console.log("data", data);
+        try {
+            const response = await fetch("https://realestate31-dev-ed.develop.my.salesforce.com/services/apexrest/webToEnquiry", {
+                method: "POST",
+                headers: {
+                     "Content-Type": "application/json",
+                     "Authorization": "Bearer 00DdN00000ShJQh!AQEAQDiV_RHGK5qqI_pnTmbdcnETaciNkW3abgsvwQUn2LKNwDn7bL07De3dCVfBzbRRopuyUUQ06LYDTiXuVcZa7yueIkZl"
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+           if (response.ok) {
+        alert('Enquiry created successfully!');
+    } else {
+        console.error(result);
+        alert('Failed to submit enquiry. Please check your input.');
+    }
+} catch (error) {
+    console.error("Error:", error);
+    alert("Failed to submit enquiry. Please try again.");
+}
+    }
+</script>
+</head>
+<body>
+<h1>Enquiry Form</h1>
+<form id="enquiryForm" onsubmit="submitForm(event)">
+    <label for="salutation">Salutation:</label><br>
+    <select id="salutation" name="salutation" required>
+        <option value="Mr.">Mr.</option>
+        <option value="Ms.">Ms.</option>
+        <option value="Mrs.">Mrs.</option>
+        <option value="Dr.">Dr.</option>
+    </select><br><br>
+
+    <label for="firstName">First Name:</label><br>
+    <input type="text" id="firstName" name="firstName" required><br><br>
+
+    <label for="lastName">Last Name:</label><br>
+    <input type="text" id="lastName" name="lastName" required><br><br>
+
+    <label for="mobile">Mobile:</label><br>
+    <input type="tel" id="mobile" name="mobile" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="interestReason">Interest Reason:</label><br>
+    <textarea id="interestReason" name="interestReason" required></textarea><br><br>
+
+    <button type="submit" onclick="submitForm(event)">Submit</button>
+</form>
+</body>
+</html>
